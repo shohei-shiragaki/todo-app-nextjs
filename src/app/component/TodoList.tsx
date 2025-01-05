@@ -1,6 +1,6 @@
 import { Todo } from "@/types";
 import Paper from '@mui/material/Paper';
-import { DataGrid, GridColDef, DataGridProps  } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { handleSelectionChange } from "@/utils/handleSelectionChange";
 import { renderMyButton } from "@/utils/renderMyButton";
 
