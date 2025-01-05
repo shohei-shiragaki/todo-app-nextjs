@@ -1,4 +1,3 @@
-import Image from "next/image";
 import TodoList from "./component/TodoList";
 import todoListMock from "./component/todoListMock";
 import Link from 'next/link';

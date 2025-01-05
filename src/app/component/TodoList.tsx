@@ -1,19 +1,13 @@
 import { Todo } from "@/types";
 import Paper from '@mui/material/Paper';
 import { DataGrid, GridColDef, DataGridProps  } from '@mui/x-data-grid';
-import { getStatusValue } from "@/utils/getStatusValue";
-// import { MyButton } from "@/utils/Button";
 import { handleSelectionChange } from "@/utils/handleSelectionChange";
 import { renderMyButton } from "@/utils/renderMyButton";
-import Link from "next/link";
 
 type TodoListProps = {
   todos: Todo[];
 };
 
-type DataGridPropsWithDisableSelectionOnClick = DataGridProps & {
-  disableSelectionOnClick?: boolean;
-};
 
 const TodoList = ({ todos }: TodoListProps) => {
   const columns: GridColDef[] = [
