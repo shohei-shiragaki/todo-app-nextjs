@@ -28,7 +28,7 @@ const TodoList = ({ todos }: TodoListProps) => {
 
   return (
     <>
-      <Paper sx={{ height: 400, width: '100%' }}>
+      <Paper sx={{ height: 400, width: '100%', backgroundColor:  'White' }}>
         <DataGrid
           rows={todos}
           columns={columns}
