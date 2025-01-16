@@ -1,4 +1,4 @@
-import { getAllTodos } from "@/blogAPI";
+import { getAllTodos } from "@/todoAPI";
 import TodoList from "./component/TodoList";
 import Link from 'next/link';
 
