@@ -7,7 +7,7 @@ export const getAllTodos = async (): Promise<Todo[]> => {
 };
 
 export const getTodoById = async (id: string): Promise<Todo> => {
-    const res = await fetch(`https://todo-api-aa9t.onrender.com/todos/${id}`, { cache: 'no-store' });
+    const res = await fetch(`https://todo-api-aa9t.onrender.com/updateTodo/${id}`, { cache: 'no-store' });
     const todos = await res.json();
     return todos;
 };
