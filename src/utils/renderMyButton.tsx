@@ -5,6 +5,6 @@ import Link from 'next/link';
 export const renderMyButton = (params: GridRenderCellParams) => {
   console.log('選択された行:', params.id);
   return (
-    <Link href={`./updateTodo/${params.id}`}>詳細</Link>
+    <Link href={`./todo-detail/${params.id}`}>詳細</Link>
   );
 };

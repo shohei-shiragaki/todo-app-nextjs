@@ -1,3 +1,5 @@
+"use client";
+
 import { Todo } from "@/types";
 import Paper from '@mui/material/Paper';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -13,7 +15,6 @@ const TodoList = ({ todos }: TodoListProps) => {
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'title', headerName: 'タイトル', width: 350 },
-    // { field: 'detail', headerName: '詳細', width: 350 },
     { field: 'deadline', headerName: '締切日', width: 200 },
     { field: 'status', headerName: 'ステータス', width: 200 },
     {

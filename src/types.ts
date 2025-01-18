@@ -4,4 +4,5 @@ export type Todo = {
   detail: string;
   deadline: string;
   status: string;
+  create_date: string;
 };
