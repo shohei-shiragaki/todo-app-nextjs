@@ -32,7 +32,6 @@ const CreatePage = () => {
     };
 
     try {
-      console.log(`リクエストボディ${JSON.stringify(req)}`)
       const response = await fetch('https://todo-api-aa9t.onrender.com/todo-create', {
         method: 'POST',
         headers: {
