@@ -40,7 +40,7 @@ const EditPage = ({ todo }: EditPageProps) => {
           },
           body: JSON.stringify(req),
         });
-
+        
         if (response.ok) {
           router.push(`../todo-detail/${todoState.id}`);          
         } else {
