@@ -13,6 +13,7 @@ type TodoListProps = {
 };
 
 const TodoList = ({ todos }: TodoListProps) => {
+  console.log("TodoList", todos);
   const [selectedIds, setSelectedIds] = useState<GridRowSelectionModel>([]);
   const [selectTodos, setSelectTodos] = useState<Todo[]>([]);
   const router = useRouter();
