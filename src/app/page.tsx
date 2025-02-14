@@ -9,9 +9,9 @@ export default async function Home() {
   return (
     <div className="md:flex">
       <div className="container mx-auto">
-        <TodoList
-          todos={todoList}
-        />
+        <div suppressHydrationWarning>
+          <TodoList todos={todoList} />
+        </div>
       </div>
     </div>
   );
