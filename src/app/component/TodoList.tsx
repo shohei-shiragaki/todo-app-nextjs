@@ -7,13 +7,15 @@ import { renderMyButton } from "@/utils/renderMyButton";
 import { useState } from "react";
 import { Box, Button } from "@mui/material";
 import { useRouter } from 'next/navigation';
+import { deleteTodoList } from "@/todoAPI";
+import dayjs from "dayjs";
 
 type TodoListProps = {
   todos: Todo[];
 };
 
 const TodoList = ({ todos }: TodoListProps) => {
-  console.log("TodoList", todos);
+
   const [selectedIds, setSelectedIds] = useState<GridRowSelectionModel>([]);
   const [selectTodos, setSelectTodos] = useState<Todo[]>([]);
   const router = useRouter();
@@ -21,7 +23,14 @@ const TodoList = ({ todos }: TodoListProps) => {
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'title', headerName: 'タイトル', width: 350 },
-    { field: 'deadline', headerName: '締切日', width: 200 },
+    { 
+      field: 'deadline',
+      headerName: '締切日',
+      width: 200,
+      valueFormatter: (params) => {
+        return dayjs(params).format('YYYY/MM/DD HH:mm');
+      }
+    },
     { 
       field: 'status',
       headerName: 'ステータス',
@@ -44,13 +53,8 @@ const TodoList = ({ todos }: TodoListProps) => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch('https://todo-api-aa9t.onrender.com/todo-delete', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(selectTodos),
-      });
+      // TODOリスト削除APIを呼び出す
+      const response = await deleteTodoList(selectTodos)
       if (response.ok) {
         console.log('削除に成功しました');
         router.refresh();
@@ -92,11 +96,15 @@ const TodoList = ({ todos }: TodoListProps) => {
         <DataGrid
           rows={todos}
           columns={columns}
-          // initialState={{ pagination: { paginationModel } }}
           pageSizeOptions={[10, 20, 50, 100]}
           checkboxSelection={true}
           disableRowSelectionOnClick={true}
           onRowSelectionModelChange={handleSelectionChange}
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'id', sort: 'asc' }],
+            },
+          }}
           sx={{ border: 0 }}
         />
       </Paper>

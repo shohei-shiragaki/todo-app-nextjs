@@ -2,9 +2,10 @@ import { getAllTodos } from "@/todoAPI";
 import TodoList from "./component/TodoList";
 
 export default async function Home() {
-  console.log('before getAllTodos');
+
+  // 全TODO取得APIを呼び出す
   const todoList = await getAllTodos()
-  console.log('after getAllTodos');
+
   return (
     <div className="md:flex">
       <div className="container mx-auto">

@@ -1,51 +1,74 @@
 "use client";
 
-import { Box, Button, Container, Paper, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { Box, Button, Container, InputLabel, Paper, TextField, Typography } from "@mui/material";
+import React from "react";
 import { useRouter } from 'next/navigation';
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs, { Dayjs } from "dayjs";
+import { useForm, Controller } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { createTodo } from "@/todoAPI";
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import 'dayjs/locale/ja';  // 日本語ロケールをインポート
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.locale('ja');  // 日本語ロケールを設定
+
+const schema = yup.object({
+  title: yup
+    .string()
+    .required('タイトルは必須です')
+    .max(50, 'タイトルは50文字以内で入力してください'),
+  detail: yup
+    .string()
+    .transform((value) => value === '' ? null : value)
+    .max(200, '詳細は200文字以内で入力してください')
+    .nullable()
+    .default(null),
+  deadline: yup
+    .mixed<Dayjs>()
+    .required('締切日は必須です')
+    .test('future', '締切日は現在時刻より後に設定してください',
+      value => dayjs(value).isAfter(dayjs()))
+}).required();
+
+type FormInputs = {
+  title: string;
+  detail: string | null;
+  deadline: dayjs.Dayjs;
+};
 
 const CreatePage = () => {
   const router = useRouter();
-  const [todoState, setTodoState] = useState({
-    title: '',
-    detail: '',
-    deadline: '',
-    status: false,
-    create_date: new Date().toISOString(),
+  const { control, handleSubmit, formState: { errors, isDirty } } = useForm<FormInputs>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      title: '',
+      detail: '',
+      deadline: dayjs()
+    }
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setTodoState(prevTodo => ({
-      ...prevTodo,
-      [name]: value
-    }));
-  };
+  const onSubmit = async (data: FormInputs) => {
 
-  const handleSave = async () => {
     const req = {
-      title: todoState.title,
-      detail: todoState.detail,
-      deadline: todoState.deadline,
-      status: todoState.status,
-      create_date: todoState.create_date
+      title: data.title,
+      detail: data.detail,
+      deadline: dayjs(data.deadline).toISOString(),
+      status: false,
+      create_date: dayjs().toISOString(),
     };
-
+    console.log("req出力",req);
     try {
-      const response = await fetch('https://todo-api-aa9t.onrender.com/todo-create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(req),
-      });
-
+      const response = await createTodo(req);
       if (response.ok) {
-        console.log('作成に成功しました');
         router.push('../');
       } else {
-        const errorData = await response.json();
-        console.error('作成に失敗しました:', errorData);
+        console.error('作成に失敗しました');
       }
     } catch (error) {
       console.error('リクエスト中にエラーが発生しました:', error);
@@ -58,33 +81,61 @@ const CreatePage = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           TODO作成ページ
         </Typography>
-        <Box component="form" noValidate autoComplete="off">
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
           <Box sx={{ mb: 2 }}>
-            <TextField
-              label="タイトル"
+          <InputLabel>タイトル</InputLabel>
+            <Controller
               name="title"
-              value={todoState.title}
-              onChange={handleChange}
-              fullWidth
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  error={!!errors.title}
+                  helperText={errors.title?.message}
+                />
+              )}
             />
           </Box>
           <Box sx={{ mb: 2 }}>
-            <TextField
-              label="詳細"
+            <InputLabel>詳細</InputLabel>
+            <Controller
               name="detail"
-              value={todoState.detail}
-              onChange={handleChange}
-              fullWidth
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  multiline
+                  rows={7}
+                  error={!!errors.detail}
+                  helperText={errors.detail?.message}
+                />
+              )}
             />
           </Box>
           <Box sx={{ mb: 2 }}>
-            <TextField
-              label="締め切り日"
-              name="deadline"
-              value={todoState.deadline}
-              onChange={handleChange}
-              fullWidth
-            />
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ja">
+              <InputLabel>締め切り日</InputLabel>
+              <Controller
+                name="deadline"
+                control={control}
+                render={({ field }) => (
+                  <DateTimePicker
+                    {...field}
+                    format="YYYY/MM/DD HH:mm"
+                    ampm={false}
+                    views={['year', 'month', 'day', 'hours', 'minutes']}  // 表示する項目を指定
+                    slotProps={{
+                      textField: {
+                        error: !!errors.deadline,
+                        helperText: errors.deadline?.message,
+                      },
+                    }}
+                  />
+                )}
+              />
+            </LocalizationProvider>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 4 }}>
             <Button
@@ -95,11 +146,12 @@ const CreatePage = () => {
               キャンセル
             </Button>
             <Button
+              type="submit"
               variant="contained"
               color="secondary"
-              onClick={handleSave}
+              disabled={!isDirty}
             >
-              保存
+              作成
             </Button>
           </Box>
         </Box>
