@@ -66,7 +66,7 @@ const DetailPage = ({ id }: DetailPageProps) => {
                       href="../" className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
                       sx={{color: 'white', textDecoration: 'none' }}
                   >
-                      戻る
+                      一覧画面へ
                   </Link>
                   <Link 
                       href={`../todo-edit/${todo.id}`} 

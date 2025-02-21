@@ -31,9 +31,7 @@ const schema = yup.object({
     .default(null),
   deadline: yup
     .mixed<Dayjs>()
-    .required('締切日は必須です')
-    .test('future', '締切日は現在時刻より後に設定してください',
-      value => dayjs(value).isAfter(dayjs())),
+    .required('締切日は必須です'),
   status: yup
     .boolean()
     .required('ステータスは必須です'),
@@ -63,7 +61,6 @@ const EditPage = ({ todo }: EditPageProps) => {
   });
 
   // フォームの値を取得
-  // const formTodo = getValues();
   const onSubmit = async (data: FormInputs) => {
     const req = {
       id: todo.id,
@@ -137,7 +134,6 @@ const EditPage = ({ todo }: EditPageProps) => {
                     {...field}
                     format="YYYY/MM/DD HH:mm"
                     ampm={false}
-                    views={['year', 'month', 'day', 'hours', 'minutes']}
                     slotProps={{
                       textField: {
                         error: !!errors.deadline,

@@ -22,12 +22,12 @@ export const getTodoById = async (id: string): Promise<Todo> => {
 
 // TODOリストを削除
 export const deleteTodoList = async (selectTodos: Todo[]) : Promise<Response> => {
-
+    
     const res = await fetch('https://todo-api-aa9t.onrender.com/todo-delete', {
     // const res = await fetch('http://127.0.0.1:8000/todo-delete', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(selectTodos),
     });
