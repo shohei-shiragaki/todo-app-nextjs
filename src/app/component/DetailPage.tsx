@@ -7,8 +7,6 @@ import Loading from "../Loading";
 import 'dayjs/locale/ja';
 dayjs.extend(utc);
 dayjs.extend(timezone);
-dayjs.locale('ja'); 
-// タイムゾーンを日本時間に設定
 dayjs.tz.setDefault("Asia/Tokyo");
 
 type DetailPageProps = {
@@ -43,7 +41,7 @@ const DetailPage = ({ todo }: DetailPageProps) => {
                   <Typography variant="h6" component="h2" gutterBottom>
                   締め切り日:
                   </Typography>
-                  <Typography variant="body1" sx={{ pl: 3 }}>{dayjs(todo.deadline).format('YYYY/MM/DD HH:mm')}</Typography>
+                  <Typography variant="body1" sx={{ pl: 3 }}>{dayjs(todo.deadline).tz("Asia/Tokyo").format('YYYY/MM/DD HH:mm')}</Typography>
               </Box>
               <Box sx={{ mb: 2 }}>
                   <Typography variant="h6" component="h2" gutterBottom>
