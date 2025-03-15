@@ -4,7 +4,7 @@ import { Todo } from "@/types";
 import Paper from '@mui/material/Paper';
 import { DataGrid, GridColDef, GridRowSelectionModel, GridRowParams } from '@mui/x-data-grid';
 import { renderMyButton } from "@/utils/renderMyButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { useRouter } from 'next/navigation';
 import { deleteTodoList, getAllTodos } from "@/todoAPI";
@@ -15,7 +15,7 @@ type TodoListProps = {
 };
 
 const TodoList = ({ todos }: TodoListProps) => {
-  const [todoData, setTodoData] = useState<Todo[]>(todos);
+  const [todoData, setTodoData] = useState<Todo[]>(todos || []);
   const [selectedIds, setSelectedIds] = useState<GridRowSelectionModel>([]);
   const [selectTodos, setSelectTodos] = useState<Todo[]>([]);
   const router = useRouter();
@@ -82,6 +82,9 @@ const TodoList = ({ todos }: TodoListProps) => {
     return isPastDeadline ? 'past-deadline' : '';
   };
 
+  useEffect(() => {
+    setTodoData(todos);
+  }, [todos]);
   return (
     <>
       <Box 
