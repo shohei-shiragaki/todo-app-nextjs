@@ -12,11 +12,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { createTodo } from "@/todoAPI";
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import 'dayjs/locale/ja';  // 日本語ロケールをインポート
+import 'dayjs/locale/ja';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
-dayjs.locale('ja');  // 日本語ロケールを設定
+dayjs.locale('ja'); 
 
 const schema = yup.object({
   title: yup
@@ -124,7 +124,7 @@ const CreatePage = () => {
                     {...field}
                     format="YYYY/MM/DD HH:mm"
                     ampm={false}
-                    views={['year', 'month', 'day', 'hours', 'minutes']}  // 表示する項目を指定
+                    views={['year', 'month', 'day', 'hours', 'minutes']}
                     slotProps={{
                       textField: {
                         error: !!errors.deadline,

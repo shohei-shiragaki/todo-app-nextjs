@@ -52,7 +52,7 @@ const TodoList = ({ todos }: TodoListProps) => {
 
   const handleSelectionChange = (selectionModel: GridRowSelectionModel) => {
     setSelectedIds(selectionModel);
-    setSelectTodos(todos.filter(todo => selectionModel.includes(todo.id)));
+    setSelectTodos(todoData.filter(todo => selectionModel.includes(todo.id)));
   };
 
   const handleDelete = async () => {
@@ -60,14 +60,7 @@ const TodoList = ({ todos }: TodoListProps) => {
       const response = await deleteTodoList(selectTodos);
       if (response.ok) {
         console.log('削除に成功しました');
-  
-        // サーバーから最新のTODOリスト取得
-        const updatedTodos = await getAllTodos();
-        setTodoData(updatedTodos);
-  
-        // 選択状態のリセット
-        setSelectedIds([]);
-        setSelectTodos([]);
+        router.refresh();
       } else {
         const errorData = await response.json();
         console.error('削除に失敗しました:', errorData);
