@@ -7,7 +7,7 @@ import { renderMyButton } from "@/utils/renderMyButton";
 import { useState } from "react";
 import { Box, Button } from "@mui/material";
 import { useRouter } from 'next/navigation';
-import { deleteTodoList } from "@/todoAPI";
+import { deleteTodoList, getAllTodos } from "@/todoAPI";
 import dayjs from "dayjs";
 
 type TodoListProps = {
@@ -15,7 +15,7 @@ type TodoListProps = {
 };
 
 const TodoList = ({ todos }: TodoListProps) => {
-
+  const [todoData, setTodoData] = useState<Todo[]>(todos);
   const [selectedIds, setSelectedIds] = useState<GridRowSelectionModel>([]);
   const [selectTodos, setSelectTodos] = useState<Todo[]>([]);
   const router = useRouter();
@@ -56,12 +56,17 @@ const TodoList = ({ todos }: TodoListProps) => {
 
   const handleDelete = async () => {
     try {
-      // TODOリスト削除APIを呼び出す
-      const response = await deleteTodoList(selectTodos)
+      const response = await deleteTodoList(selectTodos);
       if (response.ok) {
         console.log('削除に成功しました');
-        router.refresh();
-        // 必要に応じて、削除後の処理を追加します
+  
+        // サーバーから最新のTODOリスト取得
+        const updatedTodos = await getAllTodos();
+        setTodoData(updatedTodos);
+  
+        // 選択状態のリセット
+        setSelectedIds([]);
+        setSelectTodos([]);
       } else {
         const errorData = await response.json();
         console.error('削除に失敗しました:', errorData);
@@ -118,7 +123,7 @@ const TodoList = ({ todos }: TodoListProps) => {
         }}
       >
         <DataGrid
-          rows={todos}
+          rows={todoData}
           columns={columns}
           pageSizeOptions={[10, 20, 50, 100]}
           checkboxSelection
