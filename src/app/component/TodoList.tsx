@@ -30,9 +30,10 @@ const TodoList = ({ todos }: TodoListProps) => {
       field: 'deadline',
       headerName: '締切日',
       flex: 1,
-      valueFormatter: (params) => {
-        return dayjs(params).format('YYYY/MM/DD HH:mm');
-      }
+      valueFormatter: (params: { value: any }) => {
+        if (!params.value) return "";
+        return dayjs(params.value).format('YYYY/MM/DD HH:mm');
+      },
     },
     { 
       field: 'status',

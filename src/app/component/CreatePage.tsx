@@ -62,7 +62,6 @@ const CreatePage = () => {
       status: false,
       create_date: dayjs().toISOString(),
     };
-    console.log("req出力",req);
     try {
       const response = await createTodo(req);
       if (response.ok) {
