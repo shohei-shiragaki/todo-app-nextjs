@@ -9,6 +9,12 @@ import { Box, Button } from "@mui/material";
 import { useRouter } from 'next/navigation';
 import { deleteTodoList } from "@/todoAPI";
 import dayjs from "dayjs";
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import 'dayjs/locale/ja';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.locale('ja');
 
 type TodoListProps = {
   todos: Todo[];
@@ -79,6 +85,7 @@ const TodoList = ({ todos }: TodoListProps) => {
   useEffect(() => {
     setTodoData(todos);
   }, [todos]);
+
   return (
     <>
       <Box 
