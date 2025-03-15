@@ -8,6 +8,8 @@ import 'dayjs/locale/ja';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale('ja'); 
+// タイムゾーンを日本時間に設定
+dayjs.tz.setDefault("Asia/Tokyo");
 
 type DetailPageProps = {
     todo: Todo;

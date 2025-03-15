@@ -139,6 +139,14 @@ const TodoList = ({ todos }: TodoListProps) => {
               sortModel: [{ field: 'deadline', sort: 'asc' }],
             },
           }}
+          sx={{
+            '& .MuiDataGrid-cell:focus': {
+              outline: 'none', // フォーカス時のアウトラインを非表示にする
+            },
+            '& .MuiDataGrid-cell:focus-within': {
+              outline: 'none', // 編集中のアウトラインを非表示にする
+            },
+          }}
         />
       </Paper>
     </>
