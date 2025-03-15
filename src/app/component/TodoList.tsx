@@ -7,7 +7,7 @@ import { renderMyButton } from "@/utils/renderMyButton";
 import { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { useRouter } from 'next/navigation';
-import { deleteTodoList, getAllTodos } from "@/todoAPI";
+import { deleteTodoList } from "@/todoAPI";
 import dayjs from "dayjs";
 
 type TodoListProps = {
