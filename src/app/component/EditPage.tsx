@@ -2,7 +2,7 @@
 
 import { Todo } from "@/types";
 import { Box, Button, Container, FormControl, FormControlLabel, FormLabel, InputLabel, Paper, Radio, RadioGroup, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -50,13 +50,14 @@ type EditPageProps = {
 
 const EditPage = ({ todo }: EditPageProps) => {
   const router = useRouter();
+  const [todoData,setTodoData] = useState<Todo>(todo);
   const { control, handleSubmit, formState: { errors, isDirty } } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
-      title: todo.title,
-      detail: todo.detail || null,
-      deadline: dayjs(todo.deadline),
-      status: todo.status,
+      title: todoData.title,
+      detail: todoData.detail || null,
+      deadline: dayjs(todoData.deadline),
+      status: todoData.status
     }
   });
 
@@ -82,6 +83,10 @@ const EditPage = ({ todo }: EditPageProps) => {
       console.error('リクエスト中にエラーが発生しました:', error);
     }
   };
+
+  useEffect(() => {
+    setTodoData(todo);
+  }, [todo]);
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>

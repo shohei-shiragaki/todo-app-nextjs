@@ -1,30 +1,17 @@
-"use client";
-
 import { Todo } from "@/types";
 import { Box, Container, Link, Paper, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { getTodoById } from "@/todoAPI";
 import Loading from "../Loading";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 type DetailPageProps = {
-    id: string;
+    todo: Todo;
   };
   
-const DetailPage = ({ id }: DetailPageProps) => {
-    const [todo, setTodo] = useState<Todo | null>(null);
-
-    useEffect(() => {
-        const fetchTodo = async () => {
-            const todoData = await getTodoById(id);
-            setTodo(todoData);
-        };
-        fetchTodo();
-    }, [id]);
+const DetailPage = ({ todo }: DetailPageProps) => {
 
     if (!todo) {
         return <Loading/>;
