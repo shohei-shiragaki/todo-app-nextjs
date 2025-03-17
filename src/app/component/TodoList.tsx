@@ -83,10 +83,10 @@ const TodoList = ({ todos }: TodoListProps) => {
   };
 
   useEffect(() => {
-    
+
     setTodoData(todos);
     // 12分ごとにAPIを呼び出すためのインターバルを設定
-    const interval = setInterval(async () => {
+    setInterval(async () => {
       try {
         const data = await getPersistentEffort();
         console.log('Persistent Effort Data:', data);
