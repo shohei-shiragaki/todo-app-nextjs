@@ -7,7 +7,7 @@ import { renderMyButton } from "@/utils/renderMyButton";
 import { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { useRouter } from 'next/navigation';
-import { deleteTodoList } from "@/todoAPI";
+import { deleteTodoList, getPersistentEffort } from "@/todoAPI";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -84,6 +84,16 @@ const TodoList = ({ todos }: TodoListProps) => {
 
   useEffect(() => {
     setTodoData(todos);
+    const interval = setInterval(async () => {
+      try {
+        const data = await getPersistentEffort();
+        console.log('Persistent Effort Data:', data);
+      } catch (error) {
+        console.error('Persistent Effort API call failed:', error);
+      }
+    }, 12 * 60 * 1000); // 12分ごとに実行
+
+    return () => clearInterval(interval);
   }, [todos]);
 
   return (

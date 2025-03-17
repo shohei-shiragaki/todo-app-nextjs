@@ -1,5 +1,11 @@
 import { Todo, TodoCreate } from "./types";
 
+// 12分ごとに実行するAPI
+export const getPersistentEffort = async (): Promise<[]> => {
+  const res = await fetch('https://todo-api-aa9t.onrender.com/persistent-effort', { cache: 'no-store' });
+  const data = await res.json();
+  return data;
+};
 // 全TODOを取得
 export const getAllTodos = async (): Promise<Todo[]> => {
 
