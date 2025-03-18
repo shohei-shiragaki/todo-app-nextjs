@@ -81,12 +81,14 @@ const TodoList = ({ todos }: TodoListProps) => {
     const isPastDeadline = deadline.isBefore(dayjs()) && !params.row.status;
     return isPastDeadline ? 'past-deadline' : '';
   };
+  useEffect(() => {
+    setTodoData(todos);
+  }, [todos]);
 
   useEffect(() => {
 
-    setTodoData(todos);
     // 12分ごとにAPIを呼び出すためのインターバルを設定
-    const interval = setInterval(async () => {
+    setInterval(async () => {
       try {
         const data = await getPersistentEffort();
         console.log('Persistent Effort Data:', data);
@@ -94,10 +96,8 @@ const TodoList = ({ todos }: TodoListProps) => {
         console.error('Persistent Effort API call failed:', error);
       }
     }, 10 * 60 * 1000); // 10分ごとに実行
-
-    return () => clearInterval(interval);
   
-  }, [todos]);
+  }, []);
 
   return (
     <>
