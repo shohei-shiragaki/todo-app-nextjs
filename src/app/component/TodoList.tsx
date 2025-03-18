@@ -83,10 +83,6 @@ const TodoList = ({ todos }: TodoListProps) => {
   };
   useEffect(() => {
     setTodoData(todos);
-  }, [todos]);
-
-  useEffect(() => {
-
     // 12分ごとにAPIを呼び出すためのインターバルを設定
     setInterval(async () => {
       try {
@@ -96,8 +92,8 @@ const TodoList = ({ todos }: TodoListProps) => {
         console.error('Persistent Effort API call failed:', error);
       }
     }, 10 * 60 * 1000); // 10分ごとに実行
-  
-  }, []);
+  }, [todos]);
+
 
   return (
     <>
