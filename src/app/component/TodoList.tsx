@@ -86,7 +86,7 @@ const TodoList = ({ todos }: TodoListProps) => {
 
     setTodoData(todos);
     // 12分ごとにAPIを呼び出すためのインターバルを設定
-    setInterval(async () => {
+    const interval = setInterval(async () => {
       try {
         const data = await getPersistentEffort();
         console.log('Persistent Effort Data:', data);
@@ -94,6 +94,8 @@ const TodoList = ({ todos }: TodoListProps) => {
         console.error('Persistent Effort API call failed:', error);
       }
     }, 10 * 60 * 1000); // 10分ごとに実行
+
+    return () => clearInterval(interval);
   
   }, [todos]);
 
