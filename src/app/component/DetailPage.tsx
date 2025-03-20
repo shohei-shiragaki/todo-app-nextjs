@@ -3,6 +3,8 @@ import { Box, Container, Link, Paper, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+// 絶対パスで読み込むようにしましょう。
+// https://zenn.dev/aiq_dev/articles/3bcfc7bb2b7c1a
 import Loading from "../Loading";
 import 'dayjs/locale/ja';
 dayjs.extend(utc);

@@ -42,6 +42,9 @@ type FormInputs = {
   deadline: dayjs.Dayjs;
 };
 
+// ページの定義を丸ごとコンポーネントディレクトリに切り出しているのは微妙な気がします。ページの構成要素をコンポーネントと呼ぶので、ページ丸ごとであれば、componentディレクトリと同じ階層にscreenディレクトリなど作ってそこに置くか、page.tsxに書く方が良いです。
+// この辺りのディレクトリの作り方や役割の把握が、実際の現場ではかなり重要なので、ぜひ覚えておくと良いと思います。
+// また、よくある他のアプリだと、一覧と登録でページをわけずに、一覧画面上に登録や編集ダイアログを表示するパターンもありますね。私はダイアログの方が挙動が早くて好きですが、このあたりはデザイナーが決める話なので今回修正しなくてokです。次回以降で少しずつUIをより良くしていければ良いと思います。
 const CreatePage = () => {
   const router = useRouter();
   const { control, handleSubmit, formState: { errors, isDirty } } = useForm<FormInputs>({
@@ -65,6 +68,8 @@ const CreatePage = () => {
     try {
       const response = await createTodo(req);
       if (response.ok) {
+        // 遷移先を「../」にするのはあまりみないです。
+        // どの画面に遷移するかがわかりづらいので遷移先ページのパスを明示的に指定しましょう
         router.push('../');
       } else {
         console.error('作成に失敗しました');
