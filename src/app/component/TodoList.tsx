@@ -21,6 +21,15 @@ type TodoListProps = {
 };
 
 const TodoList = ({ todos }: TodoListProps) => {
+  // このようなフロント側のコンポーネントでAPI読んでsetTodoDataで取得データを保持するのはreactでよく使う書き方ですね。
+  // Nextjsであれば、サーバー側のコンポーネントでAPIを呼び出して、サーバ側でそれを描画した状態でフロントに返すケースもよくあります。
+  // Nextjsはサーバーコンポーネントが使える場合はサーバーコンポーネントを使うことが一般的（確か推奨されてた）ので、現場ではこういう書き方をせずにサーバー側で取得した方が良いです。
+  // 今後はNext.jsの書き方にシフトできる方が良いと思います。
+  // 参考: https://zenn.dev/akfm/books/nextjs-basic-principle/viewer/part_1_server_components
+
+  // ↑を書いた後に気づきましたが、src/app/todo-detail/[id]/page.tsx などはサーバー側でAPI呼び出しできていますね。
+  // 一覧の方は特別な理由があったかもしれないのでそういう場合はclientから呼び出してもいいと思います。
+  // ただコードを読む限り、サーバー側で取得できそうな気はしてます。
   const [todoData, setTodoData] = useState<Todo[]>(todos || []);
   const [selectedIds, setSelectedIds] = useState<GridRowSelectionModel>([]);
   const [selectTodos, setSelectTodos] = useState<Todo[]>([]);
@@ -106,6 +115,7 @@ const TodoList = ({ todos }: TodoListProps) => {
           '& > *': { m: 1 }  // 子要素のマージン
         }}
       >
+        {/* 登録すると削除のボタンサイズが違うのがUIデザイン的に違和感があるので揃えた方が良さそうです。 */}
         <Button
           variant="contained"
           color="primary"
@@ -135,6 +145,7 @@ const TodoList = ({ todos }: TodoListProps) => {
           }
         }}
       >
+        {/* 各カラムをhoverすると各カラムの右側にメニューアイコンが出ますが、想定通りですか？英語のメニューになっていたり挙動が怪しい部分があります。中途半端になってるので消すか、ちゃんと実装し切るか決めた方が良いと思います */}
         <DataGrid
           rows={todoData}
           columns={columns}

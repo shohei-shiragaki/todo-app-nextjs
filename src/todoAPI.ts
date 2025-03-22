@@ -1,5 +1,12 @@
+// ファイル名がtodoAPI.tsになっていて、少し違和感を感じました。
+// Next.jsでは厳密にレターケースの指定がないですが、todo-api.tsにしたほうがよさそうです。
+// 他のファイル全般にも同じことが言えます。
+// 以下だとケバブケースになっているので、それに合わせるのがよさそうです。
+// またディレクトリの構成も、以下を参考にする方と良いと思います。例えば、componentディレクトリをappの下に配置せず、appと同じ階層に配置するなどです。
+// https://github.com/nextjs/saas-starter
 import { Todo, TodoCreate } from "./types";
 
+// この役割がわかりません。他人がコードを読む時を想像して、役割や意図は明記しましょう。どれだけ読み手の立場に立てるかが重要です。
 // 12分ごとに実行するAPI
 export const getPersistentEffort = async (): Promise<[]> => {
   const res = await fetch('https://todo-api-aa9t.onrender.com/persistent-effort', { cache: 'no-store' });
