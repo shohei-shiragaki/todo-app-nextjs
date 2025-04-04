@@ -50,6 +50,8 @@ type EditPageProps = {
 
 const EditPage = ({ todo }: EditPageProps) => {
   const router = useRouter();
+  // todoDataやsetTodoDataをuseStateで管理する必要がないです。
+  // useStateは、値の変更を保持する際などに使いますが今回は引数で渡ってくるtodoオブジェクトを書き換える必要がないように思います。
   const [todoData,setTodoData] = useState<Todo>(todo);
   const { control, handleSubmit, formState: { errors, isDirty } } = useForm<FormInputs>({
     resolver: yupResolver(schema),
@@ -61,6 +63,8 @@ const EditPage = ({ todo }: EditPageProps) => {
     }
   });
 
+  // 編集ページを開き、インターネット接続を切った状態で保存ボタンを押すと、画面上で何の反応もなくユーザーが混乱します。
+  // エラーが発生している場合は、なんらかのエラーメッセージを表示するべきです。
   // フォームの値を取得
   const onSubmit = async (data: FormInputs) => {
     const req = {
@@ -74,12 +78,16 @@ const EditPage = ({ todo }: EditPageProps) => {
 
     try {
       const response = await updateTodo(req.id, req);
+
+      // else句を使わずに早期returnで書くと可読性が高くなります。
+      // https://zenn.dev/media_engine/articles/early_return
       if (response.ok) {
         router.push(`../todo-detail/${req.id}`);
       } else {
         console.error('更新に失敗しました');
       }
     } catch (error) {
+      // ユーザーに対してもエラーを表示しましょう
       console.error('リクエスト中にエラーが発生しました:', error);
     }
   };
