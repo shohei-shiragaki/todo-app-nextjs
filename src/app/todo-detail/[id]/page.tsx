@@ -1,7 +1,7 @@
 import React from "react";
-import DetailPage from "@/app/component/DetailPage";
-import { getTodoById } from "@/todoAPI";
-import Loading from "@/app/Loading";
+import DetailPage from "@/screen/detail-page";
+import { getTodoById } from "@/todo-api";
+import Loading from "@/component/loading";
 
 const page = async({ params }: { params: Promise<{ id: string }> }) => {
 

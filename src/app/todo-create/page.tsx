@@ -1,4 +1,4 @@
-import CreatePage from "@/app/component/CreatePage";
+import CreatePage from "@/screen/create-page";
 
 const page = () => {
   return <CreatePage />;

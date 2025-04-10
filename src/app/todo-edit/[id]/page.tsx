@@ -1,5 +1,5 @@
-import EditPage from "@/app/component/EditPage";
-import { getTodoById } from "@/todoAPI";
+import EditPage from "@/screen/edit-page";
+import { getTodoById } from "@/todo-api";
 import { Todo } from "@/types";
 
 const page = async ({ params }: { params: Promise<{ id: Todo["id"] }> }) => {

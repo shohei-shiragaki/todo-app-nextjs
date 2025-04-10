@@ -1,9 +1,9 @@
-import { getAllTodos } from "@/todoAPI";
-import TodoList from "./component/TodoList";
+import TodoList from "@/component/todo-list";
+import { getAllTodos } from "@/todo-api";
+
 
 export default async function Home() {
 
-  // 全TODO取得APIを呼び出す
   const todoList = await getAllTodos()
 
   return (

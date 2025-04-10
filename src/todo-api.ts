@@ -6,18 +6,11 @@
 // https://github.com/nextjs/saas-starter
 import { Todo, TodoCreate } from "./types";
 
-// この役割がわかりません。他人がコードを読む時を想像して、役割や意図は明記しましょう。どれだけ読み手の立場に立てるかが重要です。
-// 12分ごとに実行するAPI
-export const getPersistentEffort = async (): Promise<[]> => {
-  const res = await fetch('https://todo-api-aa9t.onrender.com/persistent-effort', { cache: 'no-store' });
-  const data = await res.json();
-  return data;
-};
 // 全TODOを取得
 export const getAllTodos = async (): Promise<Todo[]> => {
 
-    const res = await fetch('https://todo-api-aa9t.onrender.com', { cache: 'no-store' });
-    // const res = await fetch('http://127.0.0.1:8000', { cache: 'no-store' });
+    const res = await fetch('https://todo-api-aa9t.onrender.com/todos', { cache: 'no-store' });
+    // const res = await fetch('http://127.0.0.1:8000/todos', { cache: 'no-store' });
     const todos:Todo[] = await res.json();
     return todos;
 
