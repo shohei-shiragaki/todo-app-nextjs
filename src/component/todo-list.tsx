@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Todo } from "@/types";
 import Paper from '@mui/material/Paper';

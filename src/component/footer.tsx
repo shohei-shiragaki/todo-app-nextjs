@@ -1,6 +1,7 @@
 import React from "react";
 
 export const Footer = () => {
+  // CSSについてはなぜかtailwindが効かないので、styleで指定しています。
   const styles: { footer: React.CSSProperties; small: React.CSSProperties } = {
     footer: {
       padding: '0.5rem',

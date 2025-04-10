@@ -49,6 +49,7 @@ const DetailPage = ({ todo }: DetailPageProps) => {
                   </Typography>
                   <Typography variant="body1" sx={{ pl: 3 }}>{todo.status ? "完了" : "未完了"}</Typography>
               </Box>
+              {/* CSSについてはなぜかtailwindが効かないので、styleで指定しています。 */}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 4 }}>
                   <Link 
                       href="/" 
@@ -71,6 +72,7 @@ const DetailPage = ({ todo }: DetailPageProps) => {
                   >
                       一覧画面へ
                   </Link>
+                  {/* CSSについてはなぜかtailwindが効かないので、styleで指定しています。 */}
                   <Link 
                       href={`/todo-edit/${todo.id}`} 
                       sx={{
@@ -85,7 +87,7 @@ const DetailPage = ({ todo }: DetailPageProps) => {
                         },
                         "&:focus": {
                           outline: "none",
-                          boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)", // focus:ring-blue-300
+                          boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)", // focus:ring-blue-300と同様の効果
                         },
                       }}
                   >

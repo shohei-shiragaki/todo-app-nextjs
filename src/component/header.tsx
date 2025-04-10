@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 
 export const Header = () => {
+  // CSSについてはなぜかtailwindが効かないので、styleで指定しています。
   const styles = {
     header: {
       padding: '1.25rem',
