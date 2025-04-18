@@ -9,7 +9,12 @@ import { Todo, TodoCreate } from "./types";
 // 全TODOを取得
 export const getAllTodos = async (): Promise<Todo[]> => {
 
+    // https://todo-api-aa9t.onrender.comまでは他のAPI呼び出しでも同じ値を使うので、定数にしておくと良いです。
+    // 同じ文字列を繰り返す書くのはコードの保守性を下げるので、定数化する習慣をつけましょう。
     const res = await fetch('https://todo-api-aa9t.onrender.com/todos', { cache: 'no-store' });
+    // これはローカル用のコードですか？コメントアウトで残さない方が良いです。
+    // 環境変数を読み込んで、ローカルと本番など、環境ごとにAPIの呼び出し先を使い分ける方が良いです。
+    // https://nextjs-ja-translation-docs.vercel.app/docs/basic-features/environment-variables
     // const res = await fetch('http://127.0.0.1:8000/todos', { cache: 'no-store' });
     const todos:Todo[] = await res.json();
     return todos;

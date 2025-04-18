@@ -1,5 +1,6 @@
 "use client";
-
+// ファイル名はtodo-create-screen.tsx などとした方が一貫性があっていいです。pageという用語と、screenという用語を厳密に使い分けられます。あとtodoに関するファイルであることを明示できます。
+// これまでいろんな書籍に書いてあったと思いますが、命名にはとことん厳密にこだわりましょう。
 import { Box, Button, Container, InputLabel, Paper, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useRouter } from 'next/navigation';
