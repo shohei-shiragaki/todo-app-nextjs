@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import DetailScreen from "@/screen/detail-screen";
 import { getTodoById } from "@/todo-api";
 
