@@ -6,7 +6,7 @@ import Link from 'next/link';
 export const MyButton = (params: GridRenderCellParams) => {
   return (
     <Link 
-      href={`./todo-detail/${params.id}`}
+      href={`/todo/detail/${params.id}`}
       style={{ textDecoration: 'none' }}
     >
       <Button

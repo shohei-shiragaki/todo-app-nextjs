@@ -1,23 +1,23 @@
 "use client";
 
-import { Todo } from "@/types";
-import { Box, Button, Container, FormControl, FormControlLabel, FormLabel, InputLabel, Paper, Radio, RadioGroup, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, InputLabel, Paper, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from "dayjs";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { createTodo } from "@/todo-api";
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ja';
-import { updateTodo } from "@/todo-api";
 import ErrorDialog from "@/component/error-dialog";
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
-dayjs.locale('ja');
+dayjs.locale('ja'); 
 
 const schema = yup.object({
   title: yup
@@ -32,77 +32,68 @@ const schema = yup.object({
     .default(null),
   deadline: yup
     .mixed<Dayjs>()
-    .required('締切日は必須です'),
-  status: yup
-    .boolean()
-    .required('ステータスは必須です'),
+    .required('締切日は必須です')
+    .test('future', '締切日は現在時刻より後に設定してください',
+      value => dayjs(value).isAfter(dayjs()))
 }).required();
 
 type FormInputs = {
   title: string;
   detail: string | null;
   deadline: dayjs.Dayjs;
-  status: boolean;
 };
 
-type EditPageProps = {
-  todo: Todo;
-};
-
-const EditPage = ({ todo }: EditPageProps) => {
+const CreateScreen = () => {
   const router = useRouter();
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const { control, handleSubmit, formState: { errors, isDirty } } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
-      title: todo.title,
-      detail: todo.detail || null,
-      deadline: dayjs(todo.deadline),
-      status: todo.status
+      title: '',
+      detail: '',
+      deadline: dayjs()
     }
   });
 
   const onSubmit = async (data: FormInputs) => {
-    const req = {
-      id: todo.id,
-      title: data.title,
-      detail: data.detail,
-      deadline: dayjs(data.deadline).toISOString(),
-      status: data.status,
-      create_date: todo.create_date
-    };
-
     try {
-      const response = await updateTodo(req.id, req);
+      const req = {
+        title: data.title,
+        detail: data.detail,
+        deadline: dayjs(data.deadline).toISOString(),
+        status: false,
+        create_date: dayjs().toISOString(),
+      };
+
+      const response = await createTodo(req);
       if (!response.ok) {
-        console.error('Todoの更新に失敗しました。');
-        setErrorMessage("Todoの更新に失敗しました。もう一度お試しください。");
+        console.error('Todoの作成に失敗しました。');
+        setErrorMessage("Todoの作成に失敗しました。もう一度お試しください。");
         setErrorDialogOpen(true); 
       }
-      router.push(`/todo-detail/${req.id}`);
-
+      router.push('/');
     } catch (error) {
       console.error('想定外のエラーが発生しました:', error);
       setErrorMessage("エラーが発生しました。もう一度お試しください。");
       setErrorDialogOpen(true); 
     }
-  };
 
+  };
   const handleCloseDialog = () => {
     setErrorDialogOpen(false); 
     router.push('/');
   };
-
+  
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
       <Paper elevation={3} sx={{ p: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          TODO編集ページ
+          TODO作成ページ
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
           <Box sx={{ mb: 2 }}>
-            <InputLabel>タイトル</InputLabel>
+          <InputLabel>タイトル</InputLabel>
             <Controller
               name="title"
               control={control}
@@ -124,7 +115,6 @@ const EditPage = ({ todo }: EditPageProps) => {
               render={({ field }) => (
                 <TextField
                   {...field}
-                  value={field.value ?? ""}
                   fullWidth
                   multiline
                   rows={7}
@@ -145,6 +135,7 @@ const EditPage = ({ todo }: EditPageProps) => {
                     {...field}
                     format="YYYY/MM/DD HH:mm"
                     ampm={false}
+                    views={['year', 'month', 'day', 'hours', 'minutes']}
                     slotProps={{
                       textField: {
                         error: !!errors.deadline,
@@ -156,44 +147,13 @@ const EditPage = ({ todo }: EditPageProps) => {
               />
             </LocalizationProvider>
           </Box>
-          <Box sx={{ mb: 2 }}>
-            <FormControl component="fieldset">
-              <FormLabel 
-                component="legend" 
-                sx={{ 
-                  color: 'rgba(0, 0, 0, 0.6)',
-                  '&.Mui-focused': { color: 'rgba(0, 0, 0, 0.6)' },
-                }}
-              >
-                ステータス
-              </FormLabel>
-              <Controller
-                name="status"
-                control={control}
-                render={({ field }) => (
-                  <RadioGroup {...field} row>
-                    <FormControlLabel
-                      value={true}
-                      control={<Radio />}
-                      label="完了"
-                    />
-                    <FormControlLabel
-                      value={false}
-                      control={<Radio />}
-                      label="未完了"
-                    />
-                  </RadioGroup>
-                )}
-              />
-            </FormControl>
-          </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 4 }}>
             <Button
               variant="contained"
               color="primary"
-              onClick={() => router.push('/')}
+              onClick={() => router.push('../')}
             >
-              一覧画面へ戻る
+              キャンセル
             </Button>
             <Button
               type="submit"
@@ -201,18 +161,18 @@ const EditPage = ({ todo }: EditPageProps) => {
               color="secondary"
               disabled={!isDirty}
             >
-              保存
+              作成
             </Button>
           </Box>
         </Box>
-        <ErrorDialog
+      </Paper>
+      <ErrorDialog
         open={errorDialogOpen}
         message={errorMessage}
         onClose={handleCloseDialog}
       />
-      </Paper>
     </Container>
   );
 };
 
-export default EditPage;
+export default CreateScreen;

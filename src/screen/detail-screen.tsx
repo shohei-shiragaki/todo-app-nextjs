@@ -13,11 +13,11 @@ type DetailPageProps = {
     todo: Todo;
   };
   
-const DetailPage = ({ todo }: DetailPageProps) => {
+const DetailScreen = ({ todo }: DetailPageProps) => {
 
-    if (!todo) {
-        return <Loading/>;
-    }
+  if (!todo) {
+      return <Loading/>;
+  }
 
   return (
       <Container maxWidth="sm" sx={{ mt: 4 }}>
@@ -74,7 +74,7 @@ const DetailPage = ({ todo }: DetailPageProps) => {
                   </Link>
                   {/* CSSについてはなぜかtailwindが効かないので、styleで指定しています。 */}
                   <Link 
-                      href={`/todo-edit/${todo.id}`} 
+                      href={`/todo/edit/${todo.id}`} 
                       sx={{
                         backgroundColor: "blue",
                         color: "white",
@@ -99,4 +99,4 @@ const DetailPage = ({ todo }: DetailPageProps) => {
     )
 }
 
-export default DetailPage;
+export default DetailScreen;
